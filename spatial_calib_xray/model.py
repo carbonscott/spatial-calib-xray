@@ -112,6 +112,9 @@ class OptimizeCircleModel(CircleModel):
 
 
 class InitCircle:
+    ''' Refer to http://paulbourke.net/geometry/circlesphere/
+    '''
+
     def __init__(self, crds_pt1, crds_pt2, crds_pt3):
         self.x1, self.y1 = crds_pt1
         self.x2, self.y2 = crds_pt2

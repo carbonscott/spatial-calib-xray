@@ -37,8 +37,3 @@ for _ in range(1):
     crds = model.crds
     disp_manager.show(crds_init, crds, is_save = False)
     circle_list.append(res.params)
-
-## r1 = circle_list[0][-1]
-## r2 = circle_list[1][-1]
-## 
-## r2 - r1
