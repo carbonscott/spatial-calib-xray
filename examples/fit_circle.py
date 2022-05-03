@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-from spatial_calib_xray.model import OptimizeCircleModel
+from spatial_calib_xray.model   import OptimizeCircleModel
 from spatial_calib_xray.display import Display
 
 

@@ -12,15 +12,15 @@ import matplotlib.font_manager as font_manager
 
 
 class Display():
-    def __init__(self, img, crds_init, crds, figsize, **kwargs):
+    def __init__(self, img, figsize, **kwargs):
         self.img = img
-        self.crds = crds
-        self.crds_init = crds_init
         self.figsize = figsize
+        self.crds_mouse = []
         for k, v in kwargs.items(): setattr(self, k, v)
 
         self.config_fonts()
         self.config_colorbar()
+
 
     def config_fonts(self):
         # Where to load external font...
@@ -71,12 +71,32 @@ class Display():
         self.divnorm = mcolors.TwoSlopeNorm(vcenter = vcenter, vmin = vmin, vmax = vmax)
 
 
-    def show(self, title = '', is_save = False): 
+    def save_mouse_crds(self, event):
+        print( f"{event.xdata}, {event.ydata}" )
+        self.crds_mouse.append( (event.xdata, event.ydata) )
+
+        if len(self.crds_mouse) > 2: 
+            ## self.fig.canvas.mpl_disconnect(self.cid)
+            plt.close()
+
+
+    def select_circle(self, title = '', is_save = False): 
         self.fig, (self.ax_img, self.ax_bar_img, ) = self.create_panels()
 
         self.plot_img()
-        self.plot_circle(self.crds_init, color = 'blue', zorder = 2, label = 'init')
-        self.plot_circle(self.crds     , color = 'red', zorder = 3, label = 'final')
+
+        self.crds_mouse = []
+        self.cid = self.fig.canvas.mpl_connect('button_press_event', self.save_mouse_crds)
+
+        plt.show()
+
+
+    def show(self, crds_init, crds, title = '', is_save = False): 
+        self.fig, (self.ax_img, self.ax_bar_img, ) = self.create_panels()
+
+        self.plot_img()
+        self.plot_circle(crds_init, color = 'blue', zorder = 2, label = 'init')
+        self.plot_circle(crds     , color = 'red', zorder = 3, label = 'final')
         self.ax_img.legend(loc=(1.04,0))
 
         if not is_save: 

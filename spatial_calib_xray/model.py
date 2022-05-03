@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from math import sqrt
 import numpy as np
 from scipy.ndimage import map_coordinates
 import lmfit
@@ -93,6 +94,7 @@ class OptimizeCircleModel(CircleModel):
 
 
     def fit(self, img, **kwargs):
+        print(f"___/ Fitting \___")
         res = lmfit.minimize( self.residual_model,
                               self.params,
                               method     = 'leastsq',
@@ -105,3 +107,32 @@ class OptimizeCircleModel(CircleModel):
 
     def report_fit(self, res):
         lmfit.report_fit(res)
+
+
+
+
+class InitCircle:
+    def __init__(self, crds_pt1, crds_pt2, crds_pt3):
+        self.x1, self.y1 = crds_pt1
+        self.x2, self.y2 = crds_pt2
+        self.x3, self.y3 = crds_pt3
+
+
+    def solve(self):
+        x1, y1 = self.x1, self.y1
+        x2, y2 = self.x2, self.y2
+        x3, y3 = self.x3, self.y3
+
+        ma = (y2 - y1) / (x2 - x1)
+        mb = (y3 - y2) / (x3 - x2)
+
+        cx = ma * mb * (y1 - y3) + mb * (x1 + x2) - ma * (x2 + x3)
+        cx /= 2 * (mb - ma)
+
+        cy  = cx - (x2 + x3) / 2
+        cy *= -1 / mb
+        cy += (y2 + y3) / 2
+
+        r = sqrt( (x1 - cx)**2 + (y1 - cy)**2 )
+
+        return cx, cy, r
