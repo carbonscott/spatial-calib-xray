@@ -25,9 +25,9 @@ matplotlib
 ```
 
 
-## Fit a circle by three clicks
+## Fit a circle by three clicks (Video demo)
 
-Three clicks will provide a initial circle, whose radius and center position is
+Three clicks will provide a initial circle, whose radius and center position are
 then refined through optimization.  
 
 ![](./figures/three_clicks.gif)
