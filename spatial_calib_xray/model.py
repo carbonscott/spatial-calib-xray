@@ -21,22 +21,6 @@ class CircleModel:
         np.random.seed(seed)
 
 
-    def update_crds(self, theta):
-        cx = self.cx
-        cy = self.cy
-        r  = self.r
-
-        # Convert input to numpy array with shape (N,)...
-        if not isinstance(theta, np.ndarray): theta = np.array([theta]).reshape(-1)
-
-        len_theta = len(theta)
-
-        self.crds[1] = r * np.cos(theta) + cx   # In image, horizontal axis is axis=1 in matrix
-        self.crds[0] = r * np.sin(theta) + cy
-
-        return None
-
-
     def update_crds_with_noise(self):
         dx = np.random.normal(loc = 1.0, scale = 0.2, size = self.num)
         dy = np.random.normal(loc = 1.0, scale = 0.2, size = self.num)
@@ -48,9 +32,19 @@ class CircleModel:
 
 
     def generate_crds(self):
-        ## theta = np.random.uniform(low = 0.0, high = 2 * np.pi, size = (self.num, ))
         theta = np.linspace(0.0, 2 * np.pi, self.num)
-        self.update_crds(theta)
+
+        cx = self.cx
+        cy = self.cy
+        r  = self.r
+
+        # Convert input to numpy array with shape (N,)...
+        if not isinstance(theta, np.ndarray): theta = np.array([theta]).reshape(-1)
+
+        len_theta = len(theta)
+
+        self.crds[1] = r * np.cos(theta) + cx   # In image, horizontal axis is axis=1 in matrix
+        self.crds[0] = r * np.sin(theta) + cy
 
         return None
 
@@ -126,7 +120,9 @@ class ConcentricCircles:
         np.random.seed(seed)
 
 
-    def update_crds(self, theta):
+    def generate_crds(self):
+        theta = np.linspace(0.0, 2 * np.pi, self.num)
+
         cx = self.cx
         cy = self.cy
         r  = np.array(self.r).reshape(-1, 1)    # Facilitate broadcasting in calculting crds_x and crds_y
@@ -142,13 +138,6 @@ class ConcentricCircles:
         # Reshape crds into one flat array...
         self.crds[1] = crds_x.reshape(-1)   # In image, horizontal axis is axis=1 in matrix
         self.crds[0] = crds_y.reshape(-1)
-
-        return None
-
-
-    def generate_crds(self):
-        theta = np.linspace(0.0, 2 * np.pi, self.num)
-        self.update_crds(theta)
 
         return None
 
